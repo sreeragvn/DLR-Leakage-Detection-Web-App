@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leakage detection app</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Leakage detection app</h1>
+    <h5>Enter Mass flow through 10 Vacuum pumps</h5>
+    <div class="center-table">
+        <form method="POST">
+            <table id="index-table">
+                {% for i in range(1, 11) %}
+                <tr>
+                    <td><label for="input{{ i }}">MFC {{ i }}:</label></td>
+                    <td><input type="text" id="input{{ i }}" name="input{{ i }}" step="any"></td>
+                </tr>
+                {% endfor %}
+            </table>
+            <div class="submit-button">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+    {% if error_message %}
+        <p class="error">{{ error_message }}</p>
+    {% endif %}
+</body>
+</html>
