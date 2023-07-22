@@ -1,0 +1,4 @@
+create docker image 
+docker build -t dlr_web_app:latest .
+docker run -d -p 8000:8000 --name=leak_det_web_app dlr_web_app:latest
+http://127.0.0.1:8000/

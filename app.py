@@ -1,18 +1,10 @@
 from flask import Flask, render_template, request
-import json
-import requests
-
+from utils.module import make_prediction
 
 app = Flask(__name__)
 
-url = 'http://localhost:8501/v1/models/leak_det:predict'
-def make_prediction(instances):
-   data = json.dumps({"signature_name": "serving_default", "instances": [instances]})
-   headers = {"content-type": "application/json"}
-   json_response = requests.post(url, data=data, headers=headers)
-   predictions = json.loads(json_response.text)['predictions']
-   return predictions[0]
-
+min_limit = 0
+max_limit = 1
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -28,7 +20,7 @@ def index():
                 else:
                     input_value = float(input_value)
 
-                if not (0 <= input_value <= 1):
+                if not (min_limit <= input_value <= max_limit):
                     raise ValueError
                 float_inputs.append(input_value)
 
@@ -37,13 +29,16 @@ def index():
             # product_result = 1
             # for value in float_inputs:
             #     product_result *= value
-            total_sum = predictions[0]
-            product_result = predictions[1]
+            x_coords = predictions[0,0:1].tolist()[0]
+            y_coords = predictions[0,1:2].tolist()[0]
+
+            x_coords = "{:.2f}".format(x_coords)
+            y_coords = "{:.2f}".format(y_coords)
 
             return render_template('result.html', enumerated_float_inputs=enumerate(float_inputs, 1),
-                                   total_sum=total_sum, product_result=product_result)
+                                   total_sum=x_coords, product_result=y_coords)
         except ValueError:
-            error_message = "Invalid inputs. Please enter numbers between 0 and 1."
+            error_message = "Invalid inputs. Please enter numbers between" +  str(min_limit) + " and " + str(max_limit)
 
         return render_template('index.html', error_message=error_message)
 
