@@ -1,10 +1,10 @@
 import json
 import requests
 import joblib
-import pandas as pd
+# import pandas as pd
 import json
 import requests
-import numpy as np
+# import numpy as np
 
 MODEL_URL = 'http://localhost:8501/v1/models/leak_det:predict'
 scalar_path = './model/scalars/'
