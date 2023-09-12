@@ -9,9 +9,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 flight_models = {
-    "A380": 'http://localhost:8501/v1/models/leak_det:predict',
-    "A320": 'http://localhost:8501/v1/models/leak_det:predict',
-    "A300": 'http://localhost:8501/v1/models/leak_det:predict',
+    "A380": 'http://tensorflow-serving:8501/v1/models/leak_det:predict',
+    "A320": 'http://tensorflow-serving:8501/v1/models/leak_det:predict',
+    "A300": 'http://tensorflow-serving:8501/v1/models/leak_det:predict',
 }
 
 # MODEL_URL = 'http://localhost:8501/v1/models/single_leakage:predict'
