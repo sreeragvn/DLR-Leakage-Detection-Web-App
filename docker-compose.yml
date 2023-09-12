@@ -1,0 +1,14 @@
+version: '3'
+services:
+  flask-app:
+    image: dlr_web_app:latest  # Replace with your Flask app Docker image name and tag
+    ports:
+      - "8000:8000"  # Map host port 8000 to container port 8000
+
+  tensorflow-serving:
+    image: tensorflow/serving  # Replace with the TensorFlow Serving image and tag
+    ports:
+      - "8501:8501"  # Map host port 8501 to container port 8501
+    command: ["tensorflow_model_server", "--port=8500", "--rest_api_port=8501", "--model_name=single_leakage", "--model_base_path=/models/single_leakage"]
+    volumes:
+      - ./model/single_leakage/:/models/single_leakage  # Replace with the path to your TensorFlow Serving model directory

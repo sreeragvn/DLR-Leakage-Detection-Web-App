@@ -1,5 +1,11 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:3.9-alpine
+# FROM python:3.9-alpine
+
+# Use an official Python 3.9 runtime as a parent image
+FROM python:3.9
+
+# Set the working directory inside the container
+WORKDIR /app
 
 EXPOSE 8000
 
