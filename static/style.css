@@ -6,6 +6,19 @@ body {
     padding: 0;
 }
 
+.image-container {
+    float: right; /* Float the container to the right */
+    margin-left: 20px;
+    margin-right: 60px;
+    margin-top: 60px; /* Add some space between the table and the image */
+}
+
+/* Styling for the image within the container */
+.image-container img {
+    max-width: 1000px; /* Set the maximum width of the image */
+    max-height: 1000px; /* Set the maximum height of the image */
+}
+
 h1 {
     color: #f2f2f2;
     text-align: center;

@@ -47,7 +47,7 @@ def make_prediction(instances):
    predictions = json.loads(json_response.text)['predictions']
 #    print(predictions)
    predictions = postprocess_output(predictions[0])
-#    print(predictions)
+   print(predictions)
    plot_test_pred(predictions[0])
    return predictions
 
@@ -55,14 +55,14 @@ x_range = np.arange(180, 16048, 250)
 y_range = np.arange(100, 5233, 250)
 X, Y = np.meshgrid(x_range, y_range)
 def plot_test_pred(pred):
-    plt.figure(figsize=(25, 12.5))
+    plt.figure(figsize=(40, 20))
     
     # plt.title(f'Sample Number {sample_number}', fontsize=20)
     
     # plot sensor positions
     sensors = np.array([[2426, 70], [5480, 70], [8661, 191], [11676, 584], [13976, 917], [2603, 5163], [5723, 5163], [8417, 5103], [11646, 4740], [14641, 4391]])
     for i in range(len(sensors)):
-        plt.scatter(sensors[i, 0], sensors[i, 1], color='tab:green', s=200)
+        plt.scatter(sensors[i, 0], sensors[i, 1], color='tab:green', s=300)
         if i < 5:
             plt.text(sensors[i, 0], sensors[i, 1] - 200, 'MFC'+str(i+1), fontsize='xx-large')
         else:
@@ -70,7 +70,7 @@ def plot_test_pred(pred):
 
     # plot leakage positions
     plt.scatter(X, Y, color='black', s=10)
-    plt.scatter(pred[0], pred[1], color='tab:red', s=400, label='Leakage')
+    plt.scatter(pred[0], pred[1], color='tab:red', s=200)
 
     # print(X.shape)
 
@@ -93,10 +93,8 @@ def plot_test_pred(pred):
     # plt.text(180, 5800, f'(x1, y1) = ({x1}, {y1}) = ({j1-31}, {-i1+10})', fontsize=20)
     # invert y axis
     plt.gca().invert_yaxis()
-    plt.tight_layout()
-    plt.legend(loc='lower right',)
-    plt.title("Leakage location", fontsize = 20)
-    plt.savefig('./static/predictions_plot.png')
+    # plt.title("Leakage location")
+    plt.savefig('./predictions_plot.png')
 
     # plt.show()
 

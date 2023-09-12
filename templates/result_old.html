@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leakage coordinates</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Leakage coordinates</h1>
+    <!-- <p>Total Sum: {{ total_sum }}</p>
+    <p>Product Result: {{ product_result }}</p> -->
+
+    <div class="center-table">
+        <table id="result-table">
+            <tr>
+                <th>X</th>
+                <th>Y</th>
+            </tr>
+            <tr>
+                <td>{{ total_sum }}</td>
+                <td>{{ product_result }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="center-table">
+        <table id="result-table">
+            <tr>
+                <th>MFC</th>
+                <th>User Input</th>
+            </tr>
+            {% for i, value in enumerated_float_inputs %}
+            <tr>
+                <td>MFC{{ i }}</td>
+                <td>{{ value }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
