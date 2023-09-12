@@ -8,8 +8,14 @@ import requests
 import matplotlib.pyplot as plt
 import numpy as np
 
+flight_models = {
+    "A380": 'http://localhost:8501/v1/models/leak_det:predict',
+    "A320": 'http://localhost:8501/v1/models/leak_det:predict',
+    "A300": 'http://localhost:8501/v1/models/leak_det:predict',
+}
+
 # MODEL_URL = 'http://localhost:8501/v1/models/single_leakage:predict'
-MODEL_URL = 'http://localhost:8501/v1/models/leak_det:predict' # if running locally
+# MODEL_URL = 'http://localhost:8501/v1/models/leak_det:predict' # if running locally
 scalar_path = './model/scalars/'
 vacuum_pumps = ['MFC'+str(i) for i in range(1,11)]
 # make sure that when you are scaling the data. it should've been a list - not numpy array or pandas dataframe
@@ -38,18 +44,21 @@ def postprocess_output(coords):
     coords = scaler_coords.inverse_transform([coords])
     return coords
 
-def make_prediction(instances):
-   instances = preprocess_input(instances)
-#    print(instances)
-   data = json.dumps({"signature_name": "serving_default", "instances": [instances]})
-   headers = {"content-type": "application/json"}
-   json_response = requests.post(MODEL_URL, data=data, headers=headers)
-   predictions = json.loads(json_response.text)['predictions']
-#    print(predictions)
-   predictions = postprocess_output(predictions[0])
-#    print(predictions)
-   plot_test_pred(predictions[0])
-   return predictions
+def make_prediction(instances, selected_flight):
+    if selected_flight in flight_models:
+        MODEL_URL = flight_models[selected_flight]
+    print(MODEL_URL)
+    instances = preprocess_input(instances)
+    #    print(instances)
+    data = json.dumps({"signature_name": "serving_default", "instances": [instances]})
+    headers = {"content-type": "application/json"}
+    json_response = requests.post(MODEL_URL, data=data, headers=headers)
+    predictions = json.loads(json_response.text)['predictions']
+    #    print(predictions)
+    predictions = postprocess_output(predictions[0])
+    #    print(predictions)
+    plot_test_pred(predictions[0])
+    return predictions
 
 x_range = np.arange(180, 16048, 250)
 y_range = np.arange(100, 5233, 250)
@@ -94,8 +103,7 @@ def plot_test_pred(pred):
     # invert y axis
     plt.gca().invert_yaxis()
     plt.tight_layout()
-    plt.legend(loc='lower right',)
-    plt.title("Leakage location", fontsize = 20)
+    plt.title("Leakage location", fontsize = 30)
     plt.savefig('./static/predictions_plot.png')
 
     # plt.show()

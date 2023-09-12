@@ -3,27 +3,112 @@
 <head>
     <title>Leakage detection app</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            text-align: center; /* Center-align the contents horizontally */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center-align the contents vertically */
+            justify-content: center;
+            height: 100vh; /* Center vertically within the viewport */
+        }
+
+        /* CSS to display "Select Flight" and dropdown in the same line */
+        .flight-selection {
+            display: flex;
+            align-items: center;
+        }
+
+        .flight-selection label {
+            margin-right: 10px;
+        }
+        /* Style for the select dropdown */
+        #selectflight {
+            width: 200px; /* Adjust the width as needed */
+        }
+    </style>
 </head>
 <body>
-    <h1>Leakage detection app</h1>
-    <h5>Enter Mass flow through 10 Vacuum pumps</h5>
-    <div class="center-table">
-        <form method="POST">
-            <table id="index-table">
-                {% for i in range(1, 11) %}
-                <tr>
-                    <td><label for="input{{ i }}">MFC {{ i }}:</label></td>
-                    <td><input type="text" id="input{{ i }}" name="input{{ i }}" step="any"></td>
-                </tr>
-                {% endfor %}
-            </table>
-            <div class="submit-button">
-                <button type="submit">Submit</button>
-            </div>
-        </form>
+    <div class="container">
+        <h1>Leakage detection app</h1>
+        <div class="flight-selection">
+            <label for="selectflight">Select Flight:</label>
+            <select id="selectflight" name="selectflight">
+                <option value="A320">A320</option>
+                <option value="A380" selected>A380</option> <!-- Selected by default -->
+                <option value="A300">A300</option> <!-- Added A300 option -->
+                <!-- Add more options as needed -->
+            </select>
+        </div>
+        <h5>Enter Mass flow through the Vacuum pumps</h5>
+        <div class="center-table">
+            <form method="POST"  onsubmit="updateSelectedFlight()">
+                <table id="index-table">
+                    <script>
+                        document.getElementById("selectflight").addEventListener("change", function() {
+                            var selectElement = document.getElementById("selectflight");
+                            var selectedValue = selectElement.options[selectElement.selectedIndex].value;
+
+                            // Dynamically update the range based on the selected option
+                            var numIterations;
+                            if (selectedValue === "A380") {
+                                numIterations = 10;
+                            } else if (selectedValue === "A300") {
+                                numIterations = 6; // Set to 6 when A300 is selected
+                            } else {
+                                numIterations = 9;
+                            }
+
+                            // Clear the existing table rows
+                            var table = document.getElementById("index-table");
+                            while (table.rows.length > 0) {
+                                table.deleteRow(0);
+                            }
+
+                            // Create new table rows based on the updated range
+                            for (var i = 1; i <= numIterations; i++) {
+                                var row = table.insertRow(i - 1);
+                                var cell1 = row.insertCell(0);
+                                var cell2 = row.insertCell(1);
+                                cell1.innerHTML = '<label for="input' + i + '">MFC ' + i + ':</label>';
+                                cell2.innerHTML = '<input type="text" id="input' + i + '" name="input' + i + '" step="any">';
+                            }
+                        });
+
+                        // Trigger the change event to populate the table initially
+                        document.getElementById("selectflight").dispatchEvent(new Event("change"));
+                    </script>
+                    <script>
+                        function updateSelectedFlight() {
+                            var selectElement = document.getElementById("selectflight");
+                            var selectedValue = selectElement.options[selectElement.selectedIndex].value;
+                    
+                            // Create a hidden input field to pass the selected flight
+                            var hiddenInput = document.createElement("input");
+                            hiddenInput.type = "hidden";
+                            hiddenInput.name = "selected_flight";
+                            hiddenInput.value = selectedValue;
+                            
+                            // Append the hidden input to the form
+                            var form = document.querySelector("form");
+                            form.appendChild(hiddenInput);
+                    
+                            return true; // Allow the form submission to proceed
+                        }
+                    </script>
+                    
+                </table>
+                <div class="submit-button">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+        {% if error_message %}
+            <p class="error">{{ error_message }}</p>
+        {% endif %}
     </div>
-    {% if error_message %}
-        <p class="error">{{ error_message }}</p>
-    {% endif %}
 </body>
 </html>
