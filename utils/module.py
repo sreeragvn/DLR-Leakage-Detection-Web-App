@@ -8,23 +8,32 @@ import requests
 import matplotlib.pyplot as plt
 import numpy as np
 
+
+# Mapping of flight names to TensorFlow Serving model URLs
+# current all flights are mapped to the same model hosted on tensorflow-serving docker. 
+# Once different tensorflow models are available for each of these cases, the url should be updated here.
 flight_models = {
     "A380": 'http://tensorflow-serving:8501/v1/models/leak_det:predict',
     "A320": 'http://tensorflow-serving:8501/v1/models/leak_det:predict',
     "A300": 'http://tensorflow-serving:8501/v1/models/leak_det:predict',
 }
 
-# MODEL_URL = 'http://localhost:8501/v1/models/single_leakage:predict'
-# MODEL_URL = 'http://localhost:8501/v1/models/leak_det:predict' # if running locally
+# Path to scikit-learn scalers used for data preprocessing
+# MODEL_URL = 'http://localhost:8501/v1/models/leak_det:predict' # if not running in a docker.
 scalar_path = './model/scalars/'
 vacuum_pumps = ['MFC'+str(i) for i in range(1,11)]
+
+# Load scalers for flows and coordinates
 # make sure that when you are scaling the data. it should've been a list - not numpy array or pandas dataframe
+# This scikit learn scalers take care of the standardization of the flows and coordinates.
 scaler_coords = joblib.load(scalar_path+'scaler_coords_list.save')
 scaler_flows = joblib.load(scalar_path+'scaler_flows_list.save')
 
+# Function to interchange elements in a list
 def interchange_list_elements(lst, index1, index2):
     lst[index1], lst[index2] = lst[index2], lst[index1]
 
+# Data preprocessing function
 def preprocess_input(data):
     # COMMENT THE FOLLOWING 3 LINES ONCE YOU START TO TRAIN THE MODEL IN THE RIGHT ORDER OF VACUUM PUMPS
     for i in range(0,5):
@@ -39,11 +48,13 @@ def preprocess_input(data):
     return data.tolist()[0]
     # return data[0]
 
+# Data postprocessing function
 def postprocess_output(coords):
     # coords = np.array(coords).reshape(-1,1).transpose()
     coords = scaler_coords.inverse_transform([coords])
     return coords
 
+# Function to make predictions using a selected flight's model
 def make_prediction(instances, selected_flight):
     if selected_flight in flight_models:
         MODEL_URL = flight_models[selected_flight]
@@ -60,9 +71,12 @@ def make_prediction(instances, selected_flight):
     plot_test_pred(predictions[0])
     return predictions
 
+# Grid for plotting
 x_range = np.arange(180, 16048, 250)
 y_range = np.arange(100, 5233, 250)
 X, Y = np.meshgrid(x_range, y_range)
+
+# Function to plot test predictions
 def plot_test_pred(pred):
     plt.figure(figsize=(25, 12.5))
     

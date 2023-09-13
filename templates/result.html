@@ -2,8 +2,12 @@
 <html>
 <head>
     <title>Leakage detection app</title>
+    <!-- Include the CSS file using Flask's url_for function -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- Internal CSS styles for this page -->
     <style>
+        /* CSS for layout and styling */
         .container {
             display: flex;
         }
@@ -25,10 +29,13 @@
 </head>
 <body>
     <h1>Leakage coordinates</h1>
+
+    <!-- Display the selected flight using Flask templating -->
     <p>Selected Flight: {{ selected_flight }}</p> 
     <!-- Tables on the left side -->
     <div class="container">
         <div class="left">
+            <!-- Table for displaying leakage coordinates -->
             <div class="center-table">
                 <table id="result-table">
                     <tr>
@@ -54,6 +61,7 @@
                         <th>MFC</th>
                         <th>Flow rate</th>
                     </tr>
+                    <!-- Loop through and display user input values using Flask templating -->
                     {% for i, value in enumerated_float_inputs %}
                     <tr>
                         <td>MFC{{ i }}</td>
@@ -66,6 +74,7 @@
         
         <!-- Image on the right side -->
         <div class="image-container">
+            <!-- Display an image using Flask's url_for function -->
             <img src="{{ url_for('static', filename='predictions_plot.png') }}" alt="Predictions Plot" class="image">
         </div>
     </div>

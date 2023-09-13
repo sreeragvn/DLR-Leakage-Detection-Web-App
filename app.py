@@ -3,15 +3,18 @@ from utils.module import make_prediction
 
 app = Flask(__name__)
 
+# Define minimum and maximum limits for input values
 min_limit = 0
 max_limit = 1
 
+# Define the number of model inputs for each flight
 model_input_no = {
     "A380": 10,
     "A320": 9,
     "A300": 6,
 }
 
+# Define the root route for the Flask application
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -35,7 +38,7 @@ def index():
                     raise ValueError
                 float_inputs.append(input_value)
 
-            # work around for the time being for the code to work
+            # temperory work around for the time being for the code to work. Comment this appending of zero once you have seperate models available in docker
             if selected_flight == 'A320':
                 float_inputs.append(0.0)
             if selected_flight == 'A300':
