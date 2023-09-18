@@ -46,3 +46,12 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 Enjoy using the Leakage Detection Web App! If you find it helpful or have suggestions for improvements, we'd love to hear from you.
 
+
+#### internal
+Feedback on the coding practice.
+Testing: It's important to include testing for your application to ensure it functions as expected. If you haven't done so, consider adding unit tests and possibly integration tests to cover different parts of your application.
+
+Logging: Consider implementing logging for your application. It can help with debugging and monitoring the application in production.
+
+Security: Depending on the nature of your application and the data it handles, consider security best practices, such as input validation, securing sensitive data, and following Flask security recommendations.
+
