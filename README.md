@@ -7,7 +7,7 @@ Welcome to the Leakage Detection Web App! This is a Python-based web application
 ## Features
 
 - Input data: You can provide input data related to mass flow through vacuum pumps.
-- Select Flight: Choose the aircraft model (e.g., A320, A380) to specify the context for the prediction. Based on the aircraft model chosen, the app will communicate with the appropriate model hosted on tensorflow serving docker.
+- Select Flight (Host multiple models): Choose the aircraft model (e.g., A320, A380) to specify the context for the prediction. Based on the aircraft model chosen, the app will communicate with the appropriate model hosted on tensorflow serving docker.
 - Receive Predictions: The app will process your input and provide predictions for leakage coordinates.
 - Visualization: View a graphical representation of the leakage location on a wing contour plot.
 
